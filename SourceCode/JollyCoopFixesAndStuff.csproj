@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net35</TargetFramework>
+	<Nullable>enable</Nullable>
+	<LangVersion>8.0</LangVersion>
+	<Version>1.15</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="..\..\references\Assembly-CSharp.dll"/>
+    <Reference Include="..\..\references\BepInEx.dll"/>
+    <Reference Include="..\..\references\ConfigMachine.dll"/>  
+    <Reference Include="..\..\references\HOOKS-Assembly-CSharp.dll"/>  
+    <Reference Include="..\..\references\JollyCoop.dll"/>  
+    <Reference Include="..\..\references\Mono.Cecil.dll"/>
+    <Reference Include="..\..\references\MonoMod.RuntimeDetour.dll"/>
+    <Reference Include="..\..\references\MonoMod.Utils.dll"/>
+    <Reference Include="..\..\references\Partiality.dll"/>
+    <Reference Include="..\..\references\SBCameraScroll.dll"/>
+    <Reference Include="..\..\references\ShelterBehaviors.dll"/>
+    <Reference Include="..\..\references\UnityEngine.dll"/>
+  </ItemGroup>
+
+</Project>
