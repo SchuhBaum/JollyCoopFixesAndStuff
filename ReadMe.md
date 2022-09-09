@@ -14,7 +14,7 @@ Attempts to fix or work around some of the more critical bugs in JollyCoop v1.6.
 ### Installation
 1. (ModLoader) `BepInEx` and `BOI` can be downloaded from [RainDB](https://www.raindb.net/) under `Tools`.  
   **NOTE:** Rain World's BepInEx is a modified version. Don't download it from GitHub.
-2. (Dependency) The mod `JollyCoop` can be downloaded from [RainDB](https://www.raindb.net/).
+2. (Dependency) The mod `JollyCoop` can be downloaded from [GitHub](https://github.com/Garrakx/Jolly-Coop/releases) or [RainDB](https://www.raindb.net/).
 3. (Dependency) The mod `ConfigMachine` can be downloaded from [RainDB](https://www.raindb.net/) under `Tools`.
 4. Download the file  `JollyCoopFixesAndStuff.dll` from [Releases](https://github.com/SchuhBaum/JollyCoopFixesAndStuff/releases) and place it in the folder `[Steam]\SteamApps\common\Rain World\Mods`.
 5. Start `[Steam]\SteamApps\common\Rain World\BOI\BlepOutIn.exe`.
