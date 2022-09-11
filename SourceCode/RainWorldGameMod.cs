@@ -288,13 +288,7 @@ namespace JollyCoopFixesAndStuff
                 Debug.Log("JollyCoopFixesAndStuff: isSharedRelationshipsEnabled " + MainMod.isSharedRelationshipsEnabled);
                 Debug.Log("JollyCoopFixesAndStuff: isSlugcatCollisionEnabled " + MainMod.isSlugcatCollisionEnabled);
 
-                foreach (AbstractCreature abstractPlayer in game.Players)
-                {
-                    PlayerState playerState = (PlayerState)abstractPlayer.state;
-                    playerState.foodInStomach = Mathf.Clamp(playerState.foodInStomach, 0, game.GetStorySession.characterStats.maxFood); // JollyCoop seems to spam Player.AddFood() otherwise when changing maxFood in options below foodInStomach
-                }
-
-                //TODO use weak table // maybe
+                // use weak table // maybe
                 mapPressed = new bool[game.Players.Count][];
                 for (int playerIndex = 0; playerIndex < game.Players.Count; playerIndex++)
                 {
