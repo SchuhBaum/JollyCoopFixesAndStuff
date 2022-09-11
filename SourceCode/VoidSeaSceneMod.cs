@@ -60,7 +60,24 @@ namespace JollyCoopFixesAndStuff
                     }
                 }
             }
+
             orig(voidSeaScene, eu);
+
+            bool hasReceivedTreatment = true; // the first player gets treatment but then the loop breaks in vanilla
+            foreach (AbstractCreature abstractPlayer in voidSeaScene.room.game.Players)
+            {
+                if (abstractPlayer.Room.index == voidSeaScene.room.abstractRoom.index && abstractPlayer.realizedCreature != null)
+                {
+                    if (hasReceivedTreatment)
+                    {
+                        hasReceivedTreatment = false;
+                    }
+                    else
+                    {
+                        voidSeaScene.VoidSeaTreatment(abstractPlayer.realizedCreature as Player, 0.95f);
+                    }
+                }
+            }
         }
     }
 }
