@@ -190,7 +190,7 @@ namespace JollyCoopFixesAndStuff
             if (abstractCreature.creatureTemplate.type == CreatureTemplate.Type.Slugcat)
             {
                 RainWorldGame game = abstractCreature.world.game;
-                List<AbstractCreature> abstractPlayerWithoutCameraOrLastPlayerList = new List<AbstractCreature>(); // switch camera to a living slugcat if this dying slugcat has a camera
+                List<AbstractCreature> abstractPlayerWithoutCameraOrLastPlayerList = new(); // switch camera to a living slugcat if this dying slugcat has a camera
                 RainWorldGameMod.ReturnHUD(game, abstractCreature); // when using the cycling camera setting // the player might die without a camera but with a HUD
 
                 // realizing a player resets the downed status // update downed status for all players
@@ -208,7 +208,7 @@ namespace JollyCoopFixesAndStuff
                     }
                 }
 
-                List<RoomCamera> playerCameras = new List<RoomCamera>();
+                List<RoomCamera> playerCameras = new();
                 foreach (RoomCamera roomCamera in game.cameras)
                 {
                     if (abstractPlayerWithoutCameraOrLastPlayerList.Contains(roomCamera.followAbstractCreature) && abstractPlayerWithoutCameraOrLastPlayerList.Count > 1) // second: remove player with a camera // always leave one in // the last one gets all cameras

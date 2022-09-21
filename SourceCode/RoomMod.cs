@@ -6,7 +6,7 @@ namespace JollyCoopFixesAndStuff
 {
     public static class RoomMod
     {
-        private static readonly List<Player> playerInRoomList = new List<Player>();
+        private static readonly List<Player> playerInRoomList = new();
 
         internal static void OnEnable_JollyCoop()
         {
@@ -32,7 +32,7 @@ namespace JollyCoopFixesAndStuff
                 return 0;
             }
 
-            Vector2 offset = new Vector2(683f, 384f);
+            Vector2 offset = new(683f, 384f);
             int cameraIndex = 0;
             float sqrMagnitude = (room.cameraPositions[cameraIndex] + offset - p).sqrMagnitude;
 
@@ -166,7 +166,7 @@ namespace JollyCoopFixesAndStuff
                 player.CollideWithObjects = true;
                 foreach (PhysicalObject physicalObject in room.physicalObjects[player.collisionLayer])
                 {
-                    if (!(physicalObject is Player)) // don't collide with players
+                    if (physicalObject is not Player) // don't collide with players
                     {
                         if (Mathf.Abs(player.bodyChunks[0].pos.x - physicalObject.bodyChunks[0].pos.x) < player.collisionRange + physicalObject.collisionRange && Mathf.Abs(player.bodyChunks[0].pos.y - physicalObject.bodyChunks[0].pos.y) < player.collisionRange + physicalObject.collisionRange)
                         {

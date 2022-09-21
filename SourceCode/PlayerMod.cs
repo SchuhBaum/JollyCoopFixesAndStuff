@@ -75,7 +75,7 @@ namespace JollyCoopFixesAndStuff
             {
                 return false;
             }
-            else if (objectGrabability == Player.ObjectGrabability.BigOneHand && !(player.CanPutSpearToBack || canGrabOneHanded && !(player.grasps[0]?.grabbed is Spear) && !(player.grasps[1]?.grabbed is Spear)))
+            else if (objectGrabability == Player.ObjectGrabability.BigOneHand && !(player.CanPutSpearToBack || canGrabOneHanded && player.grasps[0]?.grabbed is not Spear && player.grasps[1]?.grabbed is not Spear))
             {
                 return false;
             }

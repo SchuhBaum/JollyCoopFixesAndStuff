@@ -13,7 +13,7 @@ namespace JollyCoopFixesAndStuff
                 return null;
             }
 
-            WorldCoordinate worldCoordinate = new WorldCoordinate(abstractRoom.index, -1, -1, -1);
+            WorldCoordinate worldCoordinate = new(abstractRoom.index, -1, -1, -1);
             if (shortcutNode > -1 && shortcutNode < abstractRoom.nodes.Length && abstractRoom.nodes[shortcutNode].type == AbstractRoomNode.Type.Exit && abstractRoom.realizedRoom?.shortCutsReady == true)
             {
                 worldCoordinate = abstractRoom.realizedRoom.LocalCoordinateOfNode(shortcutNode); // why is newCoord's node = -1?
