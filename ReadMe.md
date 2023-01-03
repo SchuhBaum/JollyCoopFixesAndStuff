@@ -1,5 +1,5 @@
 ## JollyCoopFixesAndStuff
-###### Version: 1.19
+###### Version: 1.20
 
 This is a mod for Rain World v1.5.
 
@@ -126,7 +126,7 @@ v1.10:
 - Reworked void sea. Room scripts are removed (mine and JollyCoop's). The first player entering the void sea screen transition can ascend and the rest dies. The surviving player is set internally as player with the index 0 (TODO: check again later; so far I didn't had side effects).
 
 
-v1.19:
+v1.20:
 - Fixed a bug where a dead player could take the HUD.
 - Fixed a bug when using SplitScreenMod and a cycling camera where you couldn't focus the camera on yourself anymore after warping.
 - Players can release being grabbed by other players by pressing jump. Before it was by jumping.
