@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
-	<Nullable>enable</Nullable>
-	<LangVersion>10.0</LangVersion>
-	<Version>1.18</Version>
+	  <Nullable>enable</Nullable>
+	  <LangVersion>10.0</LangVersion>
+	  <Version>1.18</Version>
   </PropertyGroup>
 
   <ItemGroup>

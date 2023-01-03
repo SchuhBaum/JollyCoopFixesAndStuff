@@ -136,3 +136,4 @@ v1.18:
 - Fixed a bug where other players would not be able to breath in the void sea.
 - Fixed a bug where JollyCoop would spam AddFood() forever. Happened again with the hunter cutscene. Changed AddFoodHK() directly.
 - Restructured code.
+- Kills are shared in story mode with player 0. Otherwise kills might not be counted when playing hunter.
