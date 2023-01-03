@@ -4,8 +4,8 @@ namespace JollyCoopFixesAndStuff
 {
     internal static class RegionGateMod
     {
-        private static readonly List<RoomCamera> moveCameraList = new List<RoomCamera>();
-        private static readonly List<AbstractCreature> moveCreaturesList = new List<AbstractCreature>();
+        private static readonly List<RoomCamera> moveCameraList = new();
+        private static readonly List<AbstractCreature> moveCreaturesList = new();
 
         internal static void OnEnable()
         {

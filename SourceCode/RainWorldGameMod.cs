@@ -207,7 +207,7 @@ namespace JollyCoopFixesAndStuff
                         if (!hasRelationship[playerNumber])
                         {
                             Debug.Log("JollyCoopFixesAndStuff: Add relationship between " + abstractCreature + " and Slugcat " + abstractPlayer.ID + ".");
-                            SocialMemory.Relationship relationship = new SocialMemory.Relationship(abstractPlayer.ID)
+                            SocialMemory.Relationship relationship = new(abstractPlayer.ID)
                             {
                                 know = sharedRelationship.know,
                                 like = sharedRelationship.like,
@@ -270,7 +270,7 @@ namespace JollyCoopFixesAndStuff
             foreach (AbstractCreature abstractPlayer in game.Players)
             {
                 int playerNumber = ((PlayerState)abstractPlayer.state).playerNumber;
-                EntityID entityID = new EntityID(-1, playerNumber);
+                EntityID entityID = new(-1, playerNumber);
 
                 if (abstractPlayer.ID != entityID) // I had multiple player with the ID of player 2
                 {

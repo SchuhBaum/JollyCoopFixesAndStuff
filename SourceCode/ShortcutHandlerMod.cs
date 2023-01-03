@@ -5,7 +5,7 @@ namespace JollyCoopFixesAndStuff
 {
     public static class ShortcutHandlerMod
     {
-        internal static readonly List<TeleportationVesselMod> shortCutsReadyWaitingQueue = new List<TeleportationVesselMod>();
+        internal static readonly List<TeleportationVesselMod> shortCutsReadyWaitingQueue = new();
 
         internal static void OnEnable()
         {

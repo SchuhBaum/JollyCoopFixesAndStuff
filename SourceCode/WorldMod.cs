@@ -4,6 +4,6 @@ namespace JollyCoopFixesAndStuff
 {
     public static class WorldMod
     {
-        public static List<string> moddedShelters = new List<string>();
+        public static List<string> moddedShelters = new();
     }
 }

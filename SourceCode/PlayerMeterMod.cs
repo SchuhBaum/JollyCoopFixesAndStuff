@@ -1,14 +1,14 @@
-using MonoMod.RuntimeDetour;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using MonoMod.RuntimeDetour;
 using UnityEngine;
 
 namespace JollyCoopFixesAndStuff
 {
     public static class PlayerMeterMod
     {
-        public static Dictionary<HUD.HudPart, RoomCamera> playerMeterRoomCamera = new Dictionary<HUD.HudPart, RoomCamera>();
+        public static Dictionary<HUD.HudPart, RoomCamera> playerMeterRoomCamera = new();
 
         internal static void OnEnable()
         {
@@ -29,9 +29,7 @@ namespace JollyCoopFixesAndStuff
         // public functions //
         // ---------------- //
 
-        public delegate void delDraw(HUD.HudPart playerMeter, float timeStacker);
-
-        public static void PlayerMeter_Draw(delDraw orig, HUD.HudPart playerMeter, float timeStacker)
+        public static void PlayerMeter_Draw(Action<HUD.HudPart, float> orig, HUD.HudPart playerMeter, float timeStacker)
         {
             // SplitScreenMod adds a fix for the PlayerMeter // but that fix is based on hud.owner instead of roomCamera.followAbstractCreature // cycle camera can have different players for both -- given the changes I made to cycle camera
             if (JollyCoop.JollyMod.config.cycleCamera && playerMeterRoomCamera[playerMeter].followAbstractCreature?.realizedCreature is Player player && playerMeter.hud.owner is Player player_ && player != player_)

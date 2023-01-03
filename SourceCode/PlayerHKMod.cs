@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using System.Reflection;
 using MonoMod.RuntimeDetour;
-using On;
 using UnityEngine;
 
 namespace JollyCoopFixesAndStuff
@@ -40,9 +38,7 @@ namespace JollyCoopFixesAndStuff
         // public functions //
         // ---------------- //
 
-        public delegate void delAddFoodHK(On.Player.orig_AddFood orig_AddFood, Player player, int add);
-
-        public static void PlayerHK_AddFoodHK(delAddFoodHK orig, On.Player.orig_AddFood orig_AddFood, Player player, int add)
+        public static void PlayerHK_AddFoodHK(Action<On.Player.orig_AddFood, Player, int> orig, On.Player.orig_AddFood orig_AddFood, Player player, int add)
         {
             if (JollyCoop.PlayerHK.IsArena)
             {
@@ -73,10 +69,7 @@ namespace JollyCoopFixesAndStuff
             orig(orig_AddFood, player, add);
         }
 
-        // copied from SplitScreenMod
-        public delegate void delHandleCoopCamera(Player player, int playerNumber);
-
-        public static void PlayerHK_HandleCoopCamera(delHandleCoopCamera orig, Player player, int playerNumber)
+        public static void PlayerHK_HandleCoopCamera(Action<Player, int> _1, Player _2, int _3)
         {
             return; // ignore what JollyCoop does // JollyCoop can interfere when cycle camera is used
         }

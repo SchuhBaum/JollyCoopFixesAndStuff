@@ -6,19 +6,19 @@ namespace JollyCoopFixesAndStuff
 {
     public class MainModOptions : OptionInterface
     {
-        private static Vector2 marginX = new Vector2();
-        private static Vector2 pos = new Vector2();
+        private static Vector2 marginX = new();
+        private static Vector2 pos = new();
         private static readonly float spacing = 20f;
 
-        private static readonly List<float> boxEndPositions = new List<float>();
+        private static readonly List<float> boxEndPositions = new();
 
         private static readonly int numberOfCheckboxes = 3;
         private static readonly float checkBoxSize = 24f;
-        private static readonly List<OpCheckBox> checkBoxes = new List<OpCheckBox>();
-        private static readonly List<OpLabel> checkBoxesTextLabels = new List<OpLabel>();
+        private static readonly List<OpCheckBox> checkBoxes = new();
+        private static readonly List<OpLabel> checkBoxesTextLabels = new();
 
         private static readonly float fontHeight = 20f;
-        private static readonly List<OpLabel> textLabels = new List<OpLabel>();
+        private static readonly List<OpLabel> textLabels = new();
 
         private static float CheckBoxWithSpacing => checkBoxSize + 0.25f * spacing;
 
@@ -104,7 +104,7 @@ namespace JollyCoopFixesAndStuff
 
         private void AddCheckBox(string key, string text, string description, bool? defaultBool = null)
         {
-            OpCheckBox opCheckBox = new OpCheckBox(new Vector2(), key, defaultBool: defaultBool ?? false)
+            OpCheckBox opCheckBox = new(new Vector2(), key, defaultBool: defaultBool ?? false)
             {
                 description = description
             };
@@ -164,7 +164,7 @@ namespace JollyCoopFixesAndStuff
                 pos.y -= textHeight;
             }
 
-            OpLabel textLabel = new OpLabel(new Vector2(), new Vector2(20f, textHeight), text, alignment, bigText) // minimal size.x = 20f
+            OpLabel textLabel = new(new Vector2(), new Vector2(20f, textHeight), text, alignment, bigText) // minimal size.x = 20f
             {
                 autoWrap = true
             };

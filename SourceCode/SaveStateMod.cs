@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 namespace JollyCoopFixesAndStuff
 {
     internal static class SaveStateMod
