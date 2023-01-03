@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace JollyCoopFixesAndStuff
 {
-    [BepInPlugin("SchuhBaum.JollyCoopFixesAndStuff", "JollyCoopFixesAndStuff", "1.18")]
+    [BepInPlugin("SchuhBaum.JollyCoopFixesAndStuff", "JollyCoopFixesAndStuff", "1.19")]
     public class MainMod : BaseUnityPlugin
     {
         //
@@ -13,7 +13,7 @@ namespace JollyCoopFixesAndStuff
         //
 
         public string updateURL = "http://beestuff.pythonanywhere.com/audb/api/mods/8/4";
-        public int version = 35;
+        public int version = 36;
         public string keyE = "AQAB";
         public string keyN = "0Sb8AUUh0jkFOuNDGJti4jL0iTB4Oug0pM8opATxJH8hfAt6FW3//Q4wb4VfTHZVP3+zHMX6pxcqjdvN0wt/0SWyccfoFhx2LupmT3asV4UDPBdQNmDeA/XMfwmwYb23yxp0apq3kVJNJ3v1SExvo+EPQP4/74JueNBiYshKysRK1InJfkrO1pe1WxtcE7uIrRBVwIgegSVAJDm4PRCODWEp533RxA4FZjq8Hc4UP0Pa0LxlYlSI+jJ+hUrdoA6wd+c/R+lRqN2bjY9OE/OktAxqgthEkSXTtmZwFkCjds0RCqZTnzxfJLN7IheyZ69ptzcB6Zl7kFTEofv4uDjCYNic52/C8uarj+hl4O0yU4xpzdxhG9Tq9SAeNu7h6Dt4Impbr3dAonyVwOhA/HNIz8TUjXldRs0THcZumJ/ZvCHO3qSh7xKS/D7CWuwuY5jWzYZpyy14WOK55vnEFS0GmTwjR+zZtSUy2Y7m8hklllqHZNqRYejoORxTK4UkL4GFOk/uLZKVtOfDODwERWz3ns/eOlReeUaCG1Tole7GhvoZkSMyby/81k3Fh16Z55JD+j1HzUCaoKmT10OOmLF7muV7RV2ZWG0uzvN2oUfr5HSN3TveNw7JQPd5DvZ56whr5ExLMS7Gs6fFBesmkgAwcPTkU5pFpIjgbyk07lDI81k=";
 
@@ -63,23 +63,23 @@ namespace JollyCoopFixesAndStuff
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 string name = assembly.GetName().Name;
-                if (name == "FancySlugcats" || name == "CustomTail")
+                if (name.Contains("FancySlugcats") || name.Contains("CustomTail"))
                 {
                     matchCharacterWithPlayerNumber = true;
                 }
-                else if (name == "JollyCoop")
+                else if (name.Contains("JollyCoop"))
                 {
                     isJollyCoopEnabled = true;
                 }
-                else if (name == "ShelterBehaviors")
+                else if (name.Contains("ShelterBehaviors"))
                 {
                     isShelterBehaviorsEnabled = true;
                 }
-                else if (name == "SBCameraScroll")
+                else if (name.Contains("SBCameraScroll"))
                 {
                     isSBCameraScrollEnabled = true;
                 }
-                else if (name == "SplitScreenMod")
+                else if (name.Contains("SplitScreenMod"))
                 {
                     isSplitScreenModEnabled = true;
                 }

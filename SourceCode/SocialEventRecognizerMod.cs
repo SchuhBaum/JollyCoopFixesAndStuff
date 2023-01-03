@@ -18,14 +18,18 @@ namespace JollyCoopFixesAndStuff
 
             if (killer is not Player player) return;
             if (player.playerState.playerNumber == 0) return;
-            RainWorldGame game = socialEventRecognizer.room.game;
-            if (game.GetStorySession?.playerSessionRecords[0] is not PlayerSessionRecord playerSessionRecord) return;
+            if (socialEventRecognizer.room.game.GetStorySession?.playerSessionRecords[0] is not PlayerSessionRecord playerSessionRecord) return;
 
             // not calling orig here
             // instead I add the kill manually
             // this way I removed the assumption that player 0 needs to be realized
 
-            game.session.creatureCommunities.InfluenceLikeOfPlayer(victim.Template.communityID, socialEventRecognizer.room.world.RegionNumber, playerNumber: 0, -0.05f * victim.Template.communityInfluence, 0.25f, 0f);
+            // only share the kill;
+            // the reputation is shared to some extend anyways
+            // since you have global reputation values;
+            //RainWorldGame game = socialEventRecognizer.room.game;
+            //game.session.creatureCommunities.InfluenceLikeOfPlayer(victim.Template.communityID, socialEventRecognizer.room.world.RegionNumber, playerNumber: 0, -0.05f * victim.Template.communityInfluence, 0.25f, 0f);
+
             playerSessionRecord.AddKill(victim);
         }
     }

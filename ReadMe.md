@@ -1,5 +1,5 @@
 ## JollyCoopFixesAndStuff
-###### Version: 1.18
+###### Version: 1.19
 
 This is a mod for Rain World v1.5.
 
@@ -126,7 +126,7 @@ v1.10:
 - Reworked void sea. Room scripts are removed (mine and JollyCoop's). The first player entering the void sea screen transition can ascend and the rest dies. The surviving player is set internally as player with the index 0 (TODO: check again later; so far I didn't had side effects).
 
 
-v1.18:
+v1.19:
 - Fixed a bug where a dead player could take the HUD.
 - Fixed a bug when using SplitScreenMod and a cycling camera where you couldn't focus the camera on yourself anymore after warping.
 - Players can release being grabbed by other players by pressing jump. Before it was by jumping.
@@ -137,3 +137,4 @@ v1.18:
 - Fixed a bug where JollyCoop would spam AddFood() forever. Happened again with the hunter cutscene. Changed AddFoodHK() directly.
 - Restructured code.
 - Kills are shared in story mode with player 0. Otherwise kills might not be counted when playing hunter.
+- Fixed a bug where the dependency checks would fail when using the modloader Realm.
