@@ -253,7 +253,9 @@ namespace JollyCoopFixesAndStuff
                             WorldMod.moddedShelters.Add(room.abstractRoom.name);
                         }
 
-                        if (MainMod.isEasyModeEnabled && shelterBehaviorManager.closing && !shelterBehaviorManager.broken && room.game.Players.Count > 1)
+                        // shelterbehaviors assumes hard mode under certain conditions => intercept;
+                        // otherwise you get send to the death screen directly if someone is dead;
+                        if (MainMod.isEasyModeEnabled && shelterBehaviorManager.closing && shelterBehaviorManager.hasNoDoors && !shelterBehaviorManager.broken && room.game.Players.Count > 1)
                         {
                             Debug.Log("JollyCoopFixesAndStuff: ShelterBehaviors is closing shelter. Intercept and finish cycle.");
                             DoorClosed(room);

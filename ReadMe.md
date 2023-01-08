@@ -1,5 +1,5 @@
 ## JollyCoopFixesAndStuff
-###### Version: 1.20
+###### Version: 1.21
 
 This is a mod for Rain World v1.5.
 
@@ -138,3 +138,6 @@ v1.20:
 - Restructured code.
 - Kills are shared in story mode with player 0. Otherwise kills might not be counted when playing hunter.
 - Fixed a bug where the dependency checks would fail when using the modloader Realm.
+
+v1.21:
+- Made intercepting ShelterBehaviors's closeing shelter doors more precise. This is only needed under certain conditions when easy mode is enabled.
