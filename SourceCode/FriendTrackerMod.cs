@@ -6,7 +6,8 @@ namespace JollyCoopFixesAndStuff
     {
         internal static void OnEnable()
         {
-            On.FriendTracker.GiftRecieved += FriendTracker_GiftRecieved;
+            On.FriendTracker.GiftRecieved += FriendTracker_GiftRecieved; // improve relationships for all players when feeding lizards
+            On.FriendTracker.ItemOffered += FriendTracker_ItemOffered; // other players cannot be offered to lizards // otherwise you could reuse them when relationships are shared // lizards drop dead slugcats when they become friends
         }
 
         // ----------------- //
@@ -36,6 +37,12 @@ namespace JollyCoopFixesAndStuff
                     }
                 }
             }
+        }
+
+        private static void FriendTracker_ItemOffered(On.FriendTracker.orig_ItemOffered orig, FriendTracker friendTracker, Tracker.CreatureRepresentation creatureRepresentation, PhysicalObject item)
+        {
+            if (item is Player) return;
+            orig(friendTracker, creatureRepresentation, item);
         }
     }
 }
