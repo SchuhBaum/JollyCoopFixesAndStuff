@@ -1,5 +1,5 @@
 ## JollyCoopFixesAndStuff
-###### Version: 1.22
+###### Version: 1.23
 
 This is a mod for Rain World v1.5.
 
@@ -139,7 +139,8 @@ v1.20:
 - Kills are shared in story mode with player 0. Otherwise kills might not be counted when playing hunter.
 - Fixed a bug where the dependency checks would fail when using the modloader Realm.
 
-v1.22:
+v1.23:
 - Made intercepting ShelterBehaviors's closing shelter doors more precise. This is only needed under certain conditions when easy mode is enabled.
 - Removed the ability to feed dead slugcats to lizards. Otherwise you could abuse this when relationships are shared.
 - Fixed a bug where dead slugcats were ignored as food. This happened when they died before a dynamic relationship was created.
+- (shared relationships option) Changed implementation. Should be more reliable now.

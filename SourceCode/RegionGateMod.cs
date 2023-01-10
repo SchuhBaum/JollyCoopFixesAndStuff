@@ -4,8 +4,17 @@ namespace JollyCoopFixesAndStuff
 {
     internal static class RegionGateMod
     {
+        //
+        // variables
+        //
+
+        private static bool isNewRegionLoaded = false;
         private static readonly List<RoomCamera> moveCameraList = new();
         private static readonly List<AbstractCreature> moveCreaturesList = new();
+
+        //
+        //
+        //
 
         internal static void OnEnable()
         {
@@ -93,6 +102,7 @@ namespace JollyCoopFixesAndStuff
                     case RegionGate.Mode.MiddleClosed:
                         if (regionGate.startCounter >= 60)
                         {
+                            isNewRegionLoaded = false;
                             foreach (AbstractCreature abstractPlayer in regionGate.room.game.Players)
                             {
                                 // teleporting dead players, otherwise saving in the new region might get bugged
@@ -139,7 +149,6 @@ namespace JollyCoopFixesAndStuff
                     case RegionGate.Mode.Waiting:
                         if (!regionGate.waitingForWorldLoader)
                         {
-                            RainWorldGameMod.ShareAllRelationships(regionGate.room.game);
                             if (moveCreaturesList.Count > 0)
                             {
                                 // move teleported (dead) players to offscreen den
@@ -150,6 +159,13 @@ namespace JollyCoopFixesAndStuff
                                 }
                                 moveCreaturesList.Clear();
                             }
+                        }
+                        break;
+                    case RegionGate.Mode.OpeningMiddle:
+                        if (!isNewRegionLoaded)
+                        {
+                            isNewRegionLoaded = true;
+                            RainWorldGameMod.ShareAllRelationships(regionGate.room.game);
                         }
                         break;
                 }

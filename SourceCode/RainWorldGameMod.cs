@@ -155,12 +155,17 @@ namespace JollyCoopFixesAndStuff
 
         public static void ShareAllRelationships(RainWorldGame game)
         {
-            if (!MainMod.isSharedRelationshipsEnabled || game.Players.Count <= 1) // player count needs to be known
+            // the main purpose of this is for other players to qualify as friends;
+            // the relationships of other players simply refer to player0;
+            // but to qualify as a friend the relationship of other players need to exist as well;
+            // otherwise lizards will not follow other slugcats and only ignore them based on 
+            // their relationship (which as mentioned before simply refers to player0);
+            if (!MainMod.isSharedRelationshipsEnabled || game.Players.Count <= 1)
             {
                 return;
             }
 
-            // sync relationships with new players // needs to happen only once
+            Debug.Log("JollyCoopFixesAndStuff: Share and synchronize all relationships from Slugcat ID.-1.0 with other slugcats.");
             foreach (AbstractRoom abstractRoom in game.world.abstractRooms)
             {
                 foreach (AbstractCreature abstractCreature in abstractRoom.creatures)
@@ -180,44 +185,34 @@ namespace JollyCoopFixesAndStuff
 
         public static void ShareRelationship(RainWorldGame game, AbstractCreature? abstractCreature)
         {
-            if (abstractCreature?.state.socialMemory is SocialMemory socialMemory)
-            {
-                int playerCount = game.Players.Count;
-                bool[] hasRelationship = new bool[playerCount];
-                SocialMemory.Relationship? sharedRelationship = null;
+            if (abstractCreature?.state.socialMemory is not SocialMemory socialMemory) return;
 
-                foreach (SocialMemory.Relationship relationship in socialMemory.relationShips)
+            for (int relationshipIndex = socialMemory.relationShips.Count - 1; relationshipIndex >= 0; --relationshipIndex)
+            {
+                SocialMemory.Relationship relationship_firstPlayer = socialMemory.relationShips[relationshipIndex];
+                if (relationship_firstPlayer.subjectID.spawner == -1)
                 {
-                    if (relationship.subjectID.spawner == -1)
+                    // first player => share
+                    if (relationship_firstPlayer.subjectID.number == 0)
                     {
-                        int playerNumber = relationship.subjectID.number;
-                        if (playerNumber >= 0 && playerNumber < playerCount)
+                        for (int playerIndex = 1; playerIndex < game.Players.Count; ++playerIndex)
                         {
-                            sharedRelationship ??= relationship;
-                            hasRelationship[playerNumber] = true;
+                            SocialMemory.Relationship relationship_otherPlayer = new(game.Players[playerIndex].ID)
+                            {
+                                know = relationship_firstPlayer.know,
+                                like = relationship_firstPlayer.like,
+                                tempLike = relationship_firstPlayer.tempLike,
+
+                                fear = relationship_firstPlayer.fear,
+                                tempFear = relationship_firstPlayer.tempFear
+                            };
+                            socialMemory.relationShips.Add(relationship_otherPlayer);
                         }
                     }
-                }
-
-                if (sharedRelationship != null)
-                {
-                    foreach (AbstractCreature abstractPlayer in game.Players)
+                    // not first player => remove
+                    else if (relationship_firstPlayer.subjectID.number > 0 && relationship_firstPlayer.subjectID.number < 4)
                     {
-                        int playerNumber = ((PlayerState)abstractPlayer.state).playerNumber;
-                        if (!hasRelationship[playerNumber])
-                        {
-                            Debug.Log("JollyCoopFixesAndStuff: Add relationship between " + abstractCreature + " and Slugcat " + abstractPlayer.ID + ".");
-                            SocialMemory.Relationship relationship = new(abstractPlayer.ID)
-                            {
-                                know = sharedRelationship.know,
-                                like = sharedRelationship.like,
-                                tempLike = sharedRelationship.tempLike,
-
-                                fear = sharedRelationship.fear,
-                                tempFear = sharedRelationship.tempFear
-                            };
-                            socialMemory.relationShips.Add(relationship);
-                        }
+                        socialMemory.relationShips.RemoveAt(relationshipIndex);
                     }
                 }
             }
