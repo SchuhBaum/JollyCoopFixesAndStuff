@@ -6,7 +6,15 @@ namespace JollyCoopFixesAndStuff
 {
     public static class RoomMod
     {
-        private static readonly List<Player> playerInRoomList = new();
+        //
+        // variables
+        //
+
+        private static readonly List<Creature> creaturesInRoomList = new();
+
+        //
+        //
+        //
 
         internal static void OnEnable_JollyCoop()
         {
@@ -135,99 +143,120 @@ namespace JollyCoopFixesAndStuff
 
         private static void Room_Update_JollyCoop(On.Room.orig_Update orig, Room room)
         {
-            if (MainMod.isSlugcatCollisionEnabled || room.game == null) // collision between slugcats
+            // collision between slugcats (and creatures that are being carried by slugcats)
+            if (MainMod.isSlugcatCollisionEnabled || room.game == null)
             {
                 orig(room);
                 return;
             }
 
-            if (playerInRoomList.Count > 0) // had a problem with DeerFix when throwing puff balls // orig(room) never returned
+            if (creaturesInRoomList.Count > 0) // had a problem with DeerFix when throwing puff balls // orig(room) never returned
             {
                 Debug.Log("JollyCoopFixesAndStuff: Slugcat collisions could not be reset normally. Reset now.");
-                foreach (Player player in playerInRoomList)
+                foreach (Creature creature in creaturesInRoomList)
                 {
-                    player.CollideWithObjects = true;
+                    creature.CollideWithObjects = true;
                 }
-                playerInRoomList.Clear();
+                creaturesInRoomList.Clear();
             }
 
+            // disable collision for now and handle collision manually after calling orig();
             foreach (AbstractCreature abstractPlayer in room.game.Players)
             {
-                if (abstractPlayer.Room == room.abstractRoom && abstractPlayer.realizedCreature is Player player && player.CollideWithObjects && !JollyCoop.PlayerHK.iAmBeingCarried[player.playerState.playerNumber]) // seems like CollideWithObjects is not enough // need to check iAmBeingCarried too
+                if (abstractPlayer.Room == room.abstractRoom && abstractPlayer.realizedCreature is Player player)
                 {
-                    playerInRoomList.Add(player); // this would be bad when two rooms could be updated at the same time
-                    player.CollideWithObjects = false;
+                    foreach (Creature.Grasp? grasp in player.grasps)
+                    {
+                        if (grasp?.grabbed is Creature creature && player.Grabability(creature) != Player.ObjectGrabability.Drag)
+                        {
+                            creaturesInRoomList.Add(creature);
+                            creature.CollideWithObjects = false;
+                        }
+                    }
+
+                    // seems like CollideWithObjects is not enough;
+                    // need to check iAmBeingCarried too;
+                    // otherwise backPlayers can collide with creatures that are being eating;
+                    if (player.CollideWithObjects && !JollyCoop.PlayerHK.iAmBeingCarried[player.playerState.playerNumber])
+                    {
+                        creaturesInRoomList.Add(player);
+                        player.CollideWithObjects = false;
+                    }
                 }
             }
             orig(room);
 
-            foreach (Player player in playerInRoomList)
+            foreach (Creature creatureA in creaturesInRoomList)
             {
-                player.CollideWithObjects = true;
-                foreach (PhysicalObject physicalObject in room.physicalObjects[player.collisionLayer])
+                creatureA.CollideWithObjects = true;
+                foreach (PhysicalObject physicalObjectB in room.physicalObjects[creatureA.collisionLayer])
                 {
-                    if (physicalObject is not Player) // don't collide with players
+                    // disable collision of players and creatures that they are carrying;
+                    // including creatures that backPlayers are carrying;
+                    if ((physicalObjectB is not Creature creatureB || !creaturesInRoomList.Contains(creatureB)) && Mathf.Abs(creatureA.bodyChunks[0].pos.x - physicalObjectB.bodyChunks[0].pos.x) < creatureA.collisionRange + physicalObjectB.collisionRange && Mathf.Abs(creatureA.bodyChunks[0].pos.y - physicalObjectB.bodyChunks[0].pos.y) < creatureA.collisionRange + physicalObjectB.collisionRange)
                     {
-                        if (Mathf.Abs(player.bodyChunks[0].pos.x - physicalObject.bodyChunks[0].pos.x) < player.collisionRange + physicalObject.collisionRange && Mathf.Abs(player.bodyChunks[0].pos.y - physicalObject.bodyChunks[0].pos.y) < player.collisionRange + physicalObject.collisionRange)
+                        bool hasCollided = false;
+                        bool isGrabbed = false;
+
+                        // is grabbing;
+                        // only remaining case where this is needed is when
+                        // the player drags a creature;
+                        if (creatureA.Template.grasps > 0)
                         {
-                            bool hasCollided = false;
-                            bool isGrabbed = false;
-
-                            if (player.Template.grasps > 0)
+                            foreach (Creature.Grasp? grasp in creatureA.grasps)
                             {
-                                foreach (Creature.Grasp grasp in player.grasps)
+                                if (grasp != null && grasp.grabbed == physicalObjectB)
                                 {
-                                    if (grasp != null && grasp.grabbed == physicalObject)
-                                    {
-                                        isGrabbed = true;
-                                        break;
-                                    }
+                                    isGrabbed = true;
+                                    break;
                                 }
                             }
+                        }
 
-                            if (!isGrabbed && physicalObject is Creature creature && creature.Template.grasps > 0)
+                        // is being grabbed;
+                        // creatureB_.Template.grasps > 0 takes also care of creatureB_.grasps != null;
+                        if (!isGrabbed && physicalObjectB is Creature creatureB_ && creatureB_.Template.grasps > 0)
+                        {
+                            foreach (Creature.Grasp? grasp in creatureB_.grasps)
                             {
-                                foreach (Creature.Grasp grasp in creature.grasps)
+                                if (grasp != null && grasp.grabbed == creatureA)
                                 {
-                                    if (grasp != null && grasp.grabbed == player)
-                                    {
-                                        isGrabbed = true;
-                                        break;
-                                    }
+                                    isGrabbed = true;
+                                    break;
                                 }
                             }
+                        }
 
-                            if (!isGrabbed)
+                        if (!isGrabbed)
+                        {
+                            foreach (BodyChunk playerBodyChunk in creatureA.bodyChunks)
                             {
-                                foreach (BodyChunk playerBodyChunk in player.bodyChunks)
+                                foreach (BodyChunk pOBodyChunk in physicalObjectB.bodyChunks)
                                 {
-                                    foreach (BodyChunk pOBodyChunk in physicalObject.bodyChunks)
+                                    if (playerBodyChunk.collideWithObjects && pOBodyChunk.collideWithObjects && Custom.DistLess(playerBodyChunk.pos, pOBodyChunk.pos, playerBodyChunk.rad + pOBodyChunk.rad))
                                     {
-                                        if (playerBodyChunk.collideWithObjects && pOBodyChunk.collideWithObjects && Custom.DistLess(playerBodyChunk.pos, pOBodyChunk.pos, playerBodyChunk.rad + pOBodyChunk.rad))
+                                        float radiusCombined = playerBodyChunk.rad + pOBodyChunk.rad;
+                                        float distance = Vector2.Distance(playerBodyChunk.pos, pOBodyChunk.pos);
+                                        Vector2 direction = Custom.DirVec(playerBodyChunk.pos, pOBodyChunk.pos);
+                                        float massProportion = pOBodyChunk.mass / (playerBodyChunk.mass + pOBodyChunk.mass);
+
+                                        playerBodyChunk.pos -= (radiusCombined - distance) * direction * massProportion;
+                                        playerBodyChunk.vel -= (radiusCombined - distance) * direction * massProportion;
+                                        pOBodyChunk.pos += (radiusCombined - distance) * direction * (1f - massProportion);
+                                        pOBodyChunk.vel += (radiusCombined - distance) * direction * (1f - massProportion);
+
+                                        if (playerBodyChunk.pos.x == pOBodyChunk.pos.x)
                                         {
-                                            float radiusCombined = playerBodyChunk.rad + pOBodyChunk.rad;
-                                            float distance = Vector2.Distance(playerBodyChunk.pos, pOBodyChunk.pos);
-                                            Vector2 direction = Custom.DirVec(playerBodyChunk.pos, pOBodyChunk.pos);
-                                            float massProportion = pOBodyChunk.mass / (playerBodyChunk.mass + pOBodyChunk.mass);
-
-                                            playerBodyChunk.pos -= (radiusCombined - distance) * direction * massProportion;
-                                            playerBodyChunk.vel -= (radiusCombined - distance) * direction * massProportion;
-                                            pOBodyChunk.pos += (radiusCombined - distance) * direction * (1f - massProportion);
-                                            pOBodyChunk.vel += (radiusCombined - distance) * direction * (1f - massProportion);
-
-                                            if (playerBodyChunk.pos.x == pOBodyChunk.pos.x)
-                                            {
-                                                playerBodyChunk.vel += Custom.DegToVec(Random.value * 360f) * 0.0001f;
-                                                pOBodyChunk.vel += Custom.DegToVec(Random.value * 360f) * 0.0001f;
-                                            }
-
-                                            if (!hasCollided)
-                                            {
-                                                player.Collide(physicalObject, playerBodyChunk.index, pOBodyChunk.index);
-                                                physicalObject.Collide(player, pOBodyChunk.index, playerBodyChunk.index);
-                                            }
-                                            hasCollided = true;
+                                            playerBodyChunk.vel += Custom.DegToVec(Random.value * 360f) * 0.0001f;
+                                            pOBodyChunk.vel += Custom.DegToVec(Random.value * 360f) * 0.0001f;
                                         }
+
+                                        if (!hasCollided)
+                                        {
+                                            creatureA.Collide(physicalObjectB, playerBodyChunk.index, pOBodyChunk.index);
+                                            physicalObjectB.Collide(creatureA, pOBodyChunk.index, playerBodyChunk.index);
+                                        }
+                                        hasCollided = true;
                                     }
                                 }
                             }
@@ -235,7 +264,7 @@ namespace JollyCoopFixesAndStuff
                     }
                 }
             }
-            playerInRoomList.Clear();
+            creaturesInRoomList.Clear();
         }
 
         private static void Room_Update_ShelterBehaviors(On.Room.orig_Update orig, Room room)

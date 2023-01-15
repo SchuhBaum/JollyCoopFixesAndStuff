@@ -48,7 +48,7 @@ namespace JollyCoopFixesAndStuff
             AddNewLine(2f);
             AddBox();
             AddCheckBox("isSharedRelationshipsEnabled", "Shared Relationships", "This option is meant to prevent tamed lizards from eating your friends. The relationships can still individually change after initialization.", defaultBool: true);
-            AddCheckBox("isSlugcatCollisionEnabled", "Slugcat Collision", "When enabled, slugcats collide with each other.", defaultBool: false);
+            AddCheckBox("isSlugcatCollisionEnabled", "Slugcat Collision", "When enabled, slugcats (and creatures that are being carried by slugcats) collide with each other.", defaultBool: false);
             AddCheckBox("hasPlayerPointers", "Player Pointer", "When enabled, shows an arrow with the player name above the slugcat. The position is based on the first camera. This is automatically disabled when using SplitScreenMod.", defaultBool: true);
 
             DrawCheckBoxes(ref Tabs[0]);
